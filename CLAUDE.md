@@ -22,9 +22,7 @@ A food menu application built on a near-stock Laravel 13 skeleton (single `init 
 - Tailwind CSS v4 runs through `@tailwindcss/vite` with no `tailwind.config.js`; theme config lives in `resources/css/app.css`. Vite entry points are `resources/css/app.css` and `resources/js/app.js`.
 - `bootstrap/app.php` is the place to configure routing, middleware, and exceptions (there is no `Kernel`). Exceptions already render as JSON for `api/*` and for `expectsJson()` requests, but no `routes/api.php` exists yet.
 - The `.claude/skills/infer-conventions` skill only runs on explicit request.
-- The Laravel Boost MCP server (`.mcp.json`) generates the block below and `AGENTS.md`. Don't hand-edit inside `<laravel-boost-guidelines>`, because `composer update` (via `boost:update`) regenerates it. Put project-specific guidance above the block.
-
-<laravel-boost-guidelines>
+- The Laravel Boost MCP server (`.mcp.json`) generates the block below and `AGENTS.md`. Don't hand-edit inside `<laravel-boost-guidelines>
 === foundation rules ===
 
 # Laravel Boost Guidelines
