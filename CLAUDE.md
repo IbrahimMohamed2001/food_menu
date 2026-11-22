@@ -1,3 +1,29 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project State
+
+A food menu application built on a near-stock Laravel 13 skeleton (single `init commit`). No domain code exists yet: only the default `User` model, the `welcome` view, and the example tests. Expect to create the menu domain (models, migrations, routes, views) from scratch, following Laravel defaults and the rules below.
+
+## Commands
+
+- First-time setup: `composer setup` (installs deps, copies `.env`, generates the key, migrates, builds assets)
+- Dev environment: `composer run dev`, which runs `php artisan dev` (server, queue, logs, and Vite together)
+- Frontend only: `npm run dev` / `npm run build`
+- All tests: `composer test` (clears config first) or `php artisan test --compact`
+- Single test: `php artisan test --compact tests/Feature/ExampleTest.php` or `php artisan test --compact --filter=testName`
+- Format PHP: `vendor/bin/pint --dirty --format agent`
+
+## Stack Notes
+
+- Database is SQLite (`database/database.sqlite`) locally. Sessions, cache, and queue all use the `database` driver, so their tables must be migrated.
+- Tests run against in-memory SQLite (`phpunit.xml`). `RefreshDatabase` is **commented out** in `tests/Pest.php`, so feature tests that touch the database must opt in with `uses(RefreshDatabase::class)`, or you can enable it there.
+- Tailwind CSS v4 runs through `@tailwindcss/vite` with no `tailwind.config.js`; theme config lives in `resources/css/app.css`. Vite entry points are `resources/css/app.css` and `resources/js/app.js`.
+- `bootstrap/app.php` is the place to configure routing, middleware, and exceptions (there is no `Kernel`). Exceptions already render as JSON for `api/*` and for `expectsJson()` requests, but no `routes/api.php` exists yet.
+- The `.claude/skills/infer-conventions` skill only runs on explicit request.
+- The Laravel Boost MCP server (`.mcp.json`) generates the block below and `AGENTS.md`. Don't hand-edit inside `<laravel-boost-guidelines>`, because `composer update` (via `boost:update`) regenerates it. Put project-specific guidance above the block.
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
