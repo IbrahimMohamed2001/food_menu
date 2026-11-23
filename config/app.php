@@ -69,6 +69,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Display Timezone & Currency
+    |--------------------------------------------------------------------------
+    |
+    | Timestamps are stored in UTC (above); the display timezone is used when
+    | showing dates to hotel staff. The currency is the ISO 4217 code every
+    | menu price and order is denominated in. Money is stored as integer
+    | minor units, so set the currency once when installing a hotel.
+    |
+    */
+
+    'display_timezone' => env('APP_DISPLAY_TIMEZONE', 'UTC'),
+
+    'currency' => env('APP_CURRENCY', 'USD'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
     |
