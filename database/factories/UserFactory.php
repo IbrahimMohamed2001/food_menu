@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\StaffRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +31,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'role' => StaffRole::OrderOperator,
         ];
     }
 
@@ -40,6 +42,36 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    /**
+     * Indicate that the user administers the installation.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => StaffRole::Admin,
+        ]);
+    }
+
+    /**
+     * Indicate that the user manages the menu.
+     */
+    public function menuManager(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => StaffRole::MenuManager,
+        ]);
+    }
+
+    /**
+     * Indicate that the user processes guest orders.
+     */
+    public function orderOperator(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => StaffRole::OrderOperator,
         ]);
     }
 }
