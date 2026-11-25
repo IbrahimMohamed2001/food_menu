@@ -14,8 +14,8 @@ return new class extends Migration
             $table->char('code_hash', 64)->unique();
             $table->timestamp('expires_at');
             $table->timestamp('used_at')->nullable();
-            $table->foreignId('device_id')->nullable()->nullOnDelete()->constrained('devices');
-            $table->foreignId('created_by_user_id')->nullable()->nullOnDelete()->constrained('users');
+            $table->foreignId('device_id')->nullable()->constrained('devices')->nullOnDelete();
+            $table->foreignId('created_by_user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }
