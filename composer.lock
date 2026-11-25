@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f96a508f4e52685e44a087e6de0ed440",
+    "content-hash": "72c2b5c9556c3068062525acf9cb0779",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -4273,6 +4273,41 @@
                 "source": "https://github.com/marc-mabe/php-enum/tree/v4.7.2"
             },
             "time": "2025-09-14T11:18:39+00:00"
+        },
+        {
+            "name": "modules/rooms",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/rooms",
+                "reference": "f81092b90110cc25d952fe270f9346804b4caecc"
+            },
+            "require": {
+                "filament/filament": "^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Modules\\Rooms\\Providers\\RoomsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Rooms\\": "src/",
+                    "Modules\\Rooms\\Tests\\": "tests/",
+                    "Modules\\Rooms\\Database\\Factories\\": "database/factories/",
+                    "Modules\\Rooms\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "monolog/monolog",

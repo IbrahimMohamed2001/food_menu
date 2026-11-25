@@ -180,4 +180,11 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Rerun a test after each change to it.
 - Run `vendor/bin/pest` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 
+=== internachi/modular/core rules ===
+
+## Modular
+
+- This a modular application. Each module is located in its own directory inside of `app-modules`.
+- IMPORTANT: Activate `modular` every time you're working with or creating a new module.
+
 </laravel-boost-guidelines>
