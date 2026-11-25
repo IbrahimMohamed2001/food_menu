@@ -10,6 +10,7 @@ use Modules\Rooms\Filament\Resources\Rooms\Pages\ListRooms;
 use Modules\Rooms\Filament\Resources\Rooms\RoomResource;
 use Modules\Rooms\Models\Device;
 use Modules\Rooms\Models\Room;
+use Modules\Rooms\Filament\Resources\Rooms\Actions\UnpairTabletAction;
 
 it('returns 403 to non-administrators opening room management', function () {
     $this->actingAs(User::factory()->menuManager()->create())
@@ -83,4 +84,35 @@ it('does not allow deleting a room with an active paired device', function () {
 
     Livewire::test(EditRoom::class, ['record' => $room->getRouteKey()])
         ->assertActionDisabled('delete');
+});
+
+it('unpairs the tablet from the edit page', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    $room = Room::factory()->create();
+    $device = Device::factory()->create(['room_id' => $room->id]);
+    $device->createToken('t');
+
+    Livewire::test(EditRoom::class, ['record' => $room->getRouteKey()])
+        ->callAction(UnpairTabletAction::class)
+        ->assertNotified();
+
+    expect($device->fresh()->isActive())->toBeFalse()
+        ->and($device->tokens()->count())->toBe(0);
+});
+
+it('hides the unpair action when no tablet is paired', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    $room = Room::factory()->create();
+
+    Livewire::test(EditRoom::class, ['record' => $room->getRouteKey()])
+        ->assertActionHidden(UnpairTabletAction::class);
+});
+
+it('allows deleting a room once its tablet is unpaired', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    $room = Room::factory()->create();
+    Device::factory()->create(['room_id' => $room->id])->revoke();
+
+    Livewire::test(EditRoom::class, ['record' => $room->getRouteKey()])
+        ->assertActionEnabled('delete');
 });
