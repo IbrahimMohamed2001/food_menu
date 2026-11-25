@@ -28,7 +28,7 @@ class DeviceController extends Controller
                 deviceName: $request->string('device_name')->toString() ?: null,
                 deviceIdentifier: $request->string('device_identifier')->toString() ?: null,
             );
-        } catch (PairingCodeNotFoundException|PairingCodeExpiredException|PairingCodeUsedException $e) {
+        } catch (PairingCodeNotFoundException | PairingCodeExpiredException | PairingCodeUsedException $e) {
             return response()->json([
                 'message' => 'The given data was invalid.',
                 'errors' => [
@@ -37,12 +37,9 @@ class DeviceController extends Controller
             ], 422);
         }
 
-        /** @var \Laravel\Sanctum\NewAccessToken $token */
-        $token = $device->getRelation('_sanctum_token');
-
         return response()->json([
             'data' => [
-                'token' => $token->plainTextToken,
+                'token' => $device->plainTextToken,
                 'device' => new DeviceResource($device),
             ],
         ], 201);

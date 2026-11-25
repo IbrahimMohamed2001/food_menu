@@ -35,6 +35,14 @@ class Device extends Model
     }
 
     /**
+     * The plain-text Sanctum token, available only on the instance returned by PairDevice.
+     * It is a declared property, so Eloquent never treats it as an attribute or relation
+     * and it is never persisted.
+     */
+    public ?string $plainTextToken = null;
+
+
+    /**
      * The room this device is paired to (null when revoked).
      */
     public function room(): BelongsTo

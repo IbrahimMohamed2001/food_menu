@@ -73,10 +73,7 @@ final class PairDevice
 
         // Create the Sanctum token outside the transaction so a token failure
         // does not silently swallow the device creation.
-        $token = $device->createToken('device-token');
-
-        // Attach the plain token as a transient property for the caller.
-        $device->setRelation('_sanctum_token', $token);
+        $device->plainTextToken = $device->createToken('device-token')->plainTextToken;
 
         return $device->load('room');
     }
