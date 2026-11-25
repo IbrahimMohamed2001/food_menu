@@ -2,7 +2,6 @@
 
 namespace Modules\Rooms\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,14 +9,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Laravel\Sanctum\PersonalAccessToken;
 use Modules\Rooms\Database\Factories\DeviceFactory;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Authenticatable;
+
 
 #[Fillable(['room_id', 'name', 'identifier', 'paired_at', 'last_seen_at', 'revoked_at'])]
 class Device extends Model
 {
     /** @use HasFactory<DeviceFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use Authenticatable, HasApiTokens, HasFactory, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -62,11 +63,13 @@ class Device extends Model
      */
     public function revoke(): void
     {
-        $this->tokens()->delete();
-        $this->update([
-            'revoked_at' => now(),
-            'room_id' => null,
-        ]);
+        DB::transaction(function () {
+            $this->tokens()->delete();
+            $this->update([
+                'revoked_at' => now(),
+                'room_id' => null
+            ]);
+        });
     }
 
     /**
