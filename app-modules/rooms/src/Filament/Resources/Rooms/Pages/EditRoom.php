@@ -6,6 +6,8 @@ use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Modules\Rooms\Filament\Resources\Rooms\RoomResource;
 use Modules\Rooms\Filament\Resources\Rooms\Actions\GeneratePairingCodeAction;
+use Modules\Rooms\Filament\Resources\Rooms\Actions\UnpairTabletAction;
+use Modules\Rooms\Models\Room;
 
 class EditRoom extends EditRecord
 {
@@ -15,12 +17,9 @@ class EditRoom extends EditRecord
     {
         return [
             GeneratePairingCodeAction::make(),
+            UnpairTabletAction::make(),
             DeleteAction::make()
-                ->before(function (DeleteAction $action) {
-                    // A room with orders cannot be deleted (FK restrict).
-                    // If the room has an active device, deactivate instead.
-                })
-                ->disabled(fn ($record) => $record->activeDevice !== null),
+                ->disabled(fn(Room $record): bool => $record->activeDevice !== null),
         ];
     }
 }
