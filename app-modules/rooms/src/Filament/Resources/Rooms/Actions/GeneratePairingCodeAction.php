@@ -38,7 +38,7 @@ class GeneratePairingCodeAction extends Action
 
                 Notification::make()
                     ->title('Pairing code generated')
-                    ->body("Enter **{$formatted}** on the tablet. The code expires in 15 minutes.")
+                    ->body(str("Enter **{$formatted}** on the tablet. The code expires in 15 minutes.")->markdown()->toHtmlString())
                     ->success()
                     ->persistent()
                     ->send();

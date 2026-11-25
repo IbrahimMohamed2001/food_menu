@@ -28,35 +28,31 @@ final class PairDevice
      */
     public function execute(string $code, ?string $deviceName, ?string $deviceIdentifier): Device
     {
-        $normalized = GeneratePairingCode::normalizeCode($code);
-        $hash = hash('sha256', $normalized);
+        $hash = hash('sha256', GeneratePairingCode::normalizeCode($code));
 
-        /** @var DevicePairingCode|null $pairingCode */
-        $pairingCode = DevicePairingCode::where('code_hash', $hash)
-            ->lockForUpdate()
-            ->first();
+        $device = DB::transaction(function () use ($hash, $deviceName, $deviceIdentifier): Device {
+            /** @var DevicePairingCode|null $pairingCode */
+            $pairingCode = DevicePairingCode::where('code_hash', $hash)
+                ->lockForUpdate()
+                ->first();
 
-        if ($pairingCode === null) {
-            throw new PairingCodeNotFoundException;
-        }
+            if ($pairingCode === null) {
+                throw new PairingCodeNotFoundException;
+            }
 
-        if ($pairingCode->expires_at->isPast()) {
-            throw new PairingCodeExpiredException;
-        }
+            if ($pairingCode->expires_at->isPast()) {
+                throw new PairingCodeExpiredException;
+            }
 
-        if ($pairingCode->used_at !== null) {
-            throw new PairingCodeUsedException;
-        }
+            if ($pairingCode->used_at !== null) {
+                throw new PairingCodeUsedException;
+            }
 
-        $device = DB::transaction(function () use ($pairingCode, $deviceName, $deviceIdentifier): Device {
             $room = $pairingCode->room;
 
             // Revoke any existing device paired to this room.
-            $existingDevice = $room->activeDevice;
+            $room->activeDevice?->revoke();
 
-            if ($existingDevice !== null) {
-                $existingDevice->revoke();
-            }
 
             // Create a new device row paired to the room.
             $device = Device::create([
